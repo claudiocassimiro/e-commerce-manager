@@ -1,0 +1,59 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+import express, { Application, Request, Response, NextFunction } from 'express';
+import dotenv from 'dotenv';
+import morgan from 'morgan';
+import cors from 'cors';
+import helmet from 'helmet';
+
+dotenv.config();
+
+class Server {
+  private app: Application;
+  private port: number | string;
+
+  constructor() {
+    this.app = express();
+    this.port = process.env.PORT || 3000;
+
+    this.middlewares();
+    this.routes();
+    this.errorHandling();
+  }
+
+  private middlewares(): void {
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(morgan('dev'));
+    this.app.use(cors());
+    this.app.use(helmet());
+  }
+
+  private routes(): void {
+    this.app.get('/', (req: Request, res: Response) => {
+      res.json({ message: 'API funcionando corretamente!' });
+    });
+  }
+
+  private errorHandling(): void {
+    this.app.use(
+      (err: any, req: Request, res: Response, _next: NextFunction) => {
+        const status = err.status || 500;
+        res.status(status).json({
+          status: 'error',
+          message: err.message || 'Erro interno do servidor',
+        });
+      },
+    );
+  }
+
+  public start(): void {
+    this.app.listen(this.port, () => {
+      console.log(`Servidor rodando na porta ${this.port}`);
+    });
+  }
+}
+
+const server = new Server();
+server.start();
