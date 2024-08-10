@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id           String       @id @default(uuid())
+  nome         String
+  email        String       @unique
+  senha        String
+  tipo         TipoUsuario
+  criadoEm     DateTime     @default(now())
+  atualizadoEm DateTime     @updatedAt
+  Cliente      Cliente?
+}
+
+model Cliente {
+  id           String    @id @default(uuid())
+  idUsuario    String    @unique
+  nomeCompleto String
+  contato      String
+  endereco     String
+  status       Boolean   @default(true)
+  criadoEm     DateTime  @default(now())
+  atualizadoEm DateTime  @updatedAt
+
+  usuario      Usuario   @relation(fields: [idUsuario], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  pedidos      Pedido[]
+}
+
+model Produto {
+  id                  String          @id @default(uuid())
+  nome                String
+  descricao           String
+  preco               Decimal         @db.Decimal(10, 2)
+  quantidadeEmEstoque Int             @default(0)
+  criadoEm            DateTime        @default(now())
+  atualizadoEm        DateTime        @updatedAt
+  itensDoPedido       ItemDoPedido[]
+}
+
+model Pedido {
+  id            String          @id @default(uuid())
+  idCliente     String
+  status        StatusPedido
+  dataPedido    DateTime        @default(now())
+  total         Decimal         @db.Decimal(10, 2)
+  itens         ItemDoPedido[]
+
+  cliente       Cliente         @relation(fields: [idCliente], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model ItemDoPedido {
+  id              String       @id @default(uuid())
+  idPedido        String
+  idProduto       String
+  quantidade      Int
+  precoPorUnidade Decimal      @db.Decimal(10, 2)
+  subtotal        Decimal      @db.Decimal(10, 2)
+
+  pedido          Pedido       @relation(fields: [idPedido], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  produto         Produto      @relation(fields: [idProduto], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model RelatorioDeVendas {
+  id                String      @id @default(uuid())
+  periodo           DateTime
+  totalVendas       Decimal     @db.Decimal(10, 2)
+  produtosVendidos  Int
+  caminhoArquivo    String
+}
+
+enum TipoUsuario {
+  ADMIN
+  CLIENTE
+}
+
+enum StatusPedido {
+  RECEBIDO
+  EM_PREPARACAO
+  DESPACHADO
+  ENTREGUE
+}
