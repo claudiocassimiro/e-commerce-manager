@@ -9,6 +9,6 @@ export const registerSchema = yup.object().shape({
   name: yup.string().required('O nome é obrigatório'),
   tipo: yup
     .mixed()
-    .oneOf(['Admin', 'Cliente'], 'Tipo de usuário inválido')
+    .oneOf(['ADMIN', 'CLIENTE'], 'Tipo de usuário inválido')
     .required('O tipo de usuário é obrigatório'),
 });
