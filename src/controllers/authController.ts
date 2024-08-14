@@ -4,6 +4,7 @@ import { AuthService } from '../services/authService';
 import { AppError } from '../utils/appError';
 import { registerSchema } from '../utils/validations/registerSchema';
 import { loginSchema } from '../utils/validations/loginSchema';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 export class AuthController {
   private authService: AuthService;
@@ -21,7 +22,9 @@ export class AuthController {
       await registerSchema.validate(req.body, { abortEarly: false });
 
       const { email, password, name, tipo } = req.body;
+
       const user = await this.authService.register(email, password, name, tipo);
+
       res.status(201).json({ user });
     } catch (error) {
       if (error instanceof yup.ValidationError) {
@@ -30,6 +33,14 @@ export class AuthController {
           new AppError(`Erro de validação: ${validationErrors}`, 400),
         );
       }
+
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        return next(new AppError('Usuário já existe', 409));
+      }
+
       next(new AppError('Erro ao registrar usuário', 500));
     }
   }
