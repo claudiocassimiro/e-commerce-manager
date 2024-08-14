@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import cors from 'cors';
 import helmet from 'helmet';
+import authRoutes from './routes/authRoutes';
+import { errorMiddleware } from './middlewares/errorMiddleware';
 
 dotenv.config();
 
@@ -31,21 +33,15 @@ class Server {
   }
 
   private routes(): void {
+    this.app.use('/auth', authRoutes);
+
     this.app.get('/', (req: Request, res: Response) => {
       res.json({ message: 'API funcionando corretamente!' });
     });
   }
 
   private errorHandling(): void {
-    this.app.use(
-      (err: any, req: Request, res: Response, _next: NextFunction) => {
-        const status = err.status || 500;
-        res.status(status).json({
-          status: 'error',
-          message: err.message || 'Erro interno do servidor',
-        });
-      },
-    );
+    this.app.use(errorMiddleware);
   }
 
   public start(): void {

@@ -13,8 +13,6 @@ model Usuario {
   email        String       @unique
   senha        String
   tipo         TipoUsuario
-  criadoEm     DateTime     @default(now())
-  atualizadoEm DateTime     @updatedAt
   Cliente      Cliente?
 }
 
@@ -25,8 +23,6 @@ model Cliente {
   contato      String
   endereco     String
   status       Boolean   @default(true)
-  criadoEm     DateTime  @default(now())
-  atualizadoEm DateTime  @updatedAt
 
   usuario      Usuario   @relation(fields: [idUsuario], references: [id], onDelete: Cascade, onUpdate: Cascade)
   pedidos      Pedido[]
@@ -38,8 +34,6 @@ model Produto {
   descricao           String
   preco               Decimal         @db.Decimal(10, 2)
   quantidadeEmEstoque Int             @default(0)
-  criadoEm            DateTime        @default(now())
-  atualizadoEm        DateTime        @updatedAt
   itensDoPedido       ItemDoPedido[]
 }
 
