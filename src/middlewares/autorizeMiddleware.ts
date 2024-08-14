@@ -3,9 +3,9 @@ import { AppError } from '../utils/appError';
 
 type UserType = 'ADMIN' | 'CLIENTE';
 
-export const authorize = (allowedRoles: UserType[]) => {
+export const autorizeMiddleware = (allowedRoles: UserType[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user;
+    const user = req.usuario;
 
     if (!user) {
       return next(new AppError('Usuário não autenticado', 401));

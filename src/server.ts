@@ -7,6 +7,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import helmet from 'helmet';
 import authRoutes from './routes/authRoutes';
+import clienteRoutes from './routes/clienteRoutes';
 import { errorMiddleware } from './middlewares/errorMiddleware';
 
 dotenv.config();
@@ -34,6 +35,7 @@ class Server {
 
   private routes(): void {
     this.app.use('/auth', authRoutes);
+    this.app.use('/api', clienteRoutes);
 
     this.app.get('/', (req: Request, res: Response) => {
       res.json({ message: 'API funcionando corretamente!' });

@@ -1,23 +1,23 @@
-// src/middlewares/authMiddleware.ts
-
 import { Request, Response, NextFunction } from 'express';
 import { verifyToken } from '../utils/jwt';
+import { Usuario } from '@prisma/client';
+import { AppError } from '../utils/appError';
 
 export const authMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {
+): void => {
   const token = req.headers.authorization?.split(' ')[1];
   if (token) {
-    const decoded = verifyToken(token);
+    const decoded: Usuario | null = verifyToken(token);
     if (decoded) {
-      req.user = decoded;
+      req.usuario = decoded;
       next();
     } else {
-      res.status(401).json({ error: 'Token inválido' });
+      return next(new AppError('Usuário não encontrado', 404));
     }
   } else {
-    res.status(401).json({ error: 'Token não fornecido' });
+    next(new AppError('Token inválido', 401));
   }
 };
