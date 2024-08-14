@@ -29,7 +29,7 @@ export class AuthService {
   async login(email: string, password: string): Promise<string | null> {
     const user = await this.userModel.findByEmail(email);
     if (user && (await comparePassword(password, user.senha))) {
-      return generateToken({ id: user.id, email: user.email, type: user.tipo });
+      return generateToken({ id: user.id, email: user.email, tipo: user.tipo });
     }
     return null;
   }
