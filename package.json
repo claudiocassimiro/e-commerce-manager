@@ -7,7 +7,7 @@
     "test": "jest",
     "eslint:fix": "eslint --fix ./*.ts",
     "build": "tsc",
-    "dev": "ts-node-dev --ignore-watch node_modules src/server.ts"
+    "dev": "ts-node-dev --files --ignore-watch node_modules src/server.ts"
   },
   "keywords": [],
   "author": "Claudio",
