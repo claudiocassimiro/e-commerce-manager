@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// src/controllers/produtoController.ts
-
 import { Request, Response, NextFunction } from 'express';
 import { ProdutoService } from '../services/produtoService';
 import { AppError } from '../utils/appError';
@@ -12,6 +10,33 @@ export class ProdutoController {
     this.produtoService = new ProdutoService();
   }
 
+  /**
+   * @swagger
+   * /api/produtos:
+   *   post:
+   *     summary: Cria um novo produto
+   *     tags: [Produtos]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               nome:
+   *                 type: string
+   *               descricao:
+   *                 type: string
+   *               preco:
+   *                 type: number
+   *               quantidadeEmEstoque:
+   *                 type: integer
+   *     responses:
+   *       201:
+   *         description: Produto criado com sucesso
+   *       500:
+   *         description: Erro ao criar produto
+   */
   async createProduto(
     req: Request,
     res: Response,
@@ -31,6 +56,27 @@ export class ProdutoController {
     }
   }
 
+  /**
+   * @swagger
+   * /api/produtos/{id}:
+   *   get:
+   *     summary: Busca um produto pelo ID
+   *     tags: [Produtos]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         schema:
+   *           type: string
+   *         required: true
+   *         description: ID do produto
+   *     responses:
+   *       200:
+   *         description: Produto encontrado
+   *       404:
+   *         description: Produto não encontrado
+   *       500:
+   *         description: Erro ao buscar produto
+   */
   async getProdutoById(
     req: Request,
     res: Response,
@@ -48,6 +94,42 @@ export class ProdutoController {
     }
   }
 
+  /**
+   * @swagger
+   * /api/produtos/{id}:
+   *   put:
+   *     summary: Atualiza um produto pelo ID
+   *     tags: [Produtos]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         schema:
+   *           type: string
+   *         required: true
+   *         description: ID do produto
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               nome:
+   *                 type: string
+   *               descricao:
+   *                 type: string
+   *               preco:
+   *                 type: number
+   *               quantidadeEmEstoque:
+   *                 type: integer
+   *     responses:
+   *       200:
+   *         description: Produto atualizado com sucesso
+   *       404:
+   *         description: Produto não encontrado
+   *       500:
+   *         description: Erro ao atualizar produto
+   */
   async updateProduto(
     req: Request,
     res: Response,
@@ -71,6 +153,27 @@ export class ProdutoController {
     }
   }
 
+  /**
+   * @swagger
+   * /api/produtos/{id}:
+   *   delete:
+   *     summary: Deleta um produto pelo ID
+   *     tags: [Produtos]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         schema:
+   *           type: string
+   *         required: true
+   *         description: ID do produto
+   *     responses:
+   *       204:
+   *         description: Produto deletado com sucesso
+   *       404:
+   *         description: Produto não encontrado
+   *       500:
+   *         description: Erro ao deletar produto
+   */
   async deleteProduto(
     req: Request,
     res: Response,
@@ -88,6 +191,48 @@ export class ProdutoController {
     }
   }
 
+  /**
+   * @swagger
+   * /api/produtos:
+   *   get:
+   *     summary: Lista todos os produtos
+   *     tags: [Produtos]
+   *     parameters:
+   *       - in: query
+   *         name: precoMin
+   *         schema:
+   *           type: number
+   *         required: false
+   *         description: Preço mínimo para filtrar
+   *       - in: query
+   *         name: precoMax
+   *         schema:
+   *           type: number
+   *         required: false
+   *         description: Preço máximo para filtrar
+   *       - in: query
+   *         name: disponibilidade
+   *         schema:
+   *           type: boolean
+   *         required: false
+   *         description: Disponibilidade do produto
+   *     responses:
+   *       200:
+   *         description: Lista de produtos
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 produtos:
+   *                   type: array
+   *                   items:
+   *                     $ref: '#/components/schemas/Produto'
+   *       400:
+   *         description: Erro de validação
+   *       500:
+   *         description: Erro ao listar produtos
+   */
   async getProdutos(
     req: Request,
     res: Response,
