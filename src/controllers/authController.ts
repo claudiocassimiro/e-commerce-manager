@@ -11,6 +11,56 @@ export class AuthController {
     this.authService = new AuthService();
   }
 
+  /**
+   * @openapi
+   * /auth/register:
+   *   post:
+   *     summary: Registra um novo usuário
+   *     tags: [Auth]
+   *     description: Cria um novo usuário com email, senha, nome e tipo.
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               email:
+   *                 type: string
+   *                 example: user@example.com
+   *               password:
+   *                 type: string
+   *                 example: password123
+   *               name:
+   *                 type: string
+   *                 example: John Doe
+   *               tipo:
+   *                 type: string
+   *                 example: ADMIN
+   *     responses:
+   *       201:
+   *         description: Usuário registrado com sucesso
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 user:
+   *                   type: object
+   *                   properties:
+   *                     email:
+   *                       type: string
+   *                     name:
+   *                       type: string
+   *                     tipo:
+   *                       type: string
+   *       400:
+   *         description: Erro de validação
+   *       409:
+   *         description: Usuário já existe
+   *       500:
+   *         description: Erro interno do servidor
+   */
   async register(
     req: Request,
     res: Response,
@@ -41,6 +91,43 @@ export class AuthController {
     }
   }
 
+  /**
+   * @openapi
+   * /auth/login:
+   *   post:
+   *     summary: Faz login de um usuário
+   *     tags: [Auth]
+   *     description: Faz login de um usuário com email e senha e retorna um token.
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               email:
+   *                 type: string
+   *                 example: user@example.com
+   *               password:
+   *                 type: string
+   *                 example: password123
+   *     responses:
+   *       200:
+   *         description: Login bem-sucedido
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 token:
+   *                   type: string
+   *       401:
+   *         description: Credenciais inválidas
+   *       400:
+   *         description: Erro de validação
+   *       500:
+   *         description: Erro interno do servidor
+   */
   async login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { email, password } = req.body;
