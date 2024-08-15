@@ -2,7 +2,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { PedidoService } from '../services/pedidoService';
 import { AppError } from '../utils/appError';
-import { ItemDoPedido } from '@prisma/client';
 import { calculateTotal } from '../utils/calculateTotal';
 
 export class PedidoController {
@@ -12,6 +11,45 @@ export class PedidoController {
     this.pedidoService = new PedidoService();
   }
 
+  /**
+   * @swagger
+   * /api/pedidos:
+   *   post:
+   *     summary: Cria um novo pedido
+   *     tags: [Pedidos]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               idCliente:
+   *                 type: string
+   *                 description: ID do cliente
+   *               itens:
+   *                 type: array
+   *                 items:
+   *                   type: object
+   *                   properties:
+   *                     idProduto:
+   *                       type: string
+   *                       description: ID do produto
+   *                     quantidade:
+   *                       type: number
+   *                       description: Quantidade do produto
+   *                     precoPorUnidade:
+   *                       type: number
+   *                       description: Preco por unidade do produto
+   *                     subtotal:
+   *                       type: number
+   *                       description: Subtotal do pedido
+   *     responses:
+   *       201:
+   *         description: Pedido criado com sucesso
+   *       500:
+   *         description: Erro ao criar pedido
+   */
   async createPedido(
     req: Request,
     res: Response,
@@ -31,6 +69,18 @@ export class PedidoController {
     }
   }
 
+  /**
+   * @swagger
+   * /api/pedidos:
+   *   get:
+   *     summary: Lista todos os pedidos
+   *     tags: [Pedidos]
+   *     responses:
+   *       200:
+   *         description: Lista de pedidos
+   *       500:
+   *         description: Erro ao listar pedidos
+   */
   async getAllPedidos(
     req: Request,
     res: Response,
@@ -44,6 +94,27 @@ export class PedidoController {
     }
   }
 
+  /**
+   * @swagger
+   * /api/pedidos/{id}:
+   *   get:
+   *     summary: Obtém um pedido pelo ID
+   *     tags: [Pedidos]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         schema:
+   *           type: string
+   *         required: true
+   *         description: ID do pedido
+   *     responses:
+   *       200:
+   *         description: Pedido encontrado
+   *       404:
+   *         description: Pedido não encontrado
+   *       500:
+   *         description: Erro ao buscar pedido
+   */
   async getPedidoById(
     req: Request,
     res: Response,
@@ -61,6 +132,46 @@ export class PedidoController {
     }
   }
 
+  /**
+   * @swagger
+   * /api/pedidos/{id}:
+   *   put:
+   *     summary: Atualiza um pedido
+   *     tags: [Pedidos]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         schema:
+   *           type: string
+   *         required: true
+   *         description: ID do pedido
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               status:
+   *                 type: string
+   *                 description: Status do pedido
+   *               itens:
+   *                 type: array
+   *                 items:
+   *                   type: object
+   *                   properties:
+   *                     produtoId:
+   *                       type: string
+   *                     quantidade:
+   *                       type: number
+   *     responses:
+   *       200:
+   *         description: Pedido atualizado com sucesso
+   *       404:
+   *         description: Pedido não encontrado
+   *       500:
+   *         description: Erro ao atualizar pedido
+   */
   async updatePedido(
     req: Request,
     res: Response,
@@ -84,6 +195,27 @@ export class PedidoController {
     }
   }
 
+  /**
+   * @swagger
+   * /api/pedidos/{id}:
+   *   delete:
+   *     summary: Deleta um pedido
+   *     tags: [Pedidos]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         schema:
+   *           type: string
+   *         required: true
+   *         description: ID do pedido
+   *     responses:
+   *       204:
+   *         description: Pedido deletado com sucesso
+   *       404:
+   *         description: Pedido não encontrado
+   *       500:
+   *         description: Erro ao deletar pedido
+   */
   async deletePedido(
     req: Request,
     res: Response,

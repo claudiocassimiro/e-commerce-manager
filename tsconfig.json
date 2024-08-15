@@ -9,6 +9,7 @@
   },
   "include": [
     "src/**/*",
-    "src/@types/**/*.d.ts" // Inclua o diretório onde você colocou o arquivo de tipos
+    "src/@types/**/*.d.ts", // Inclua o diretório onde você colocou o arquivo de tipos
+    "src/swagger.ts"
   ]
 }
