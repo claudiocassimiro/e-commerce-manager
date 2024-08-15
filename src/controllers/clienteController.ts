@@ -96,7 +96,6 @@ export class ClienteController {
   ): Promise<void> {
     try {
       const nomeCompleto = this.parseQueryParam(req.query.nomeCompleto);
-      console.log(nomeCompleto);
       const status = req.query.status === 'true';
       const clientes = await this.clienteService.getClientes({
         nomeCompleto,
