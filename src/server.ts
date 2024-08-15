@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import express, { Application, Request, Response, NextFunction } from 'express';
+import express, { Application, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import cors from 'cors';
@@ -10,6 +10,8 @@ import authRoutes from './routes/authRoutes';
 import clienteRoutes from './routes/clienteRoutes';
 import produtoRoutes from './routes/produtoRoutes';
 import pedidoRoutes from './routes/pedidoRoutes';
+import relatorioRoutes from './routes/relatorioRoutes';
+
 import { errorMiddleware } from './middlewares/errorMiddleware';
 
 dotenv.config();
@@ -40,6 +42,8 @@ class Server {
     this.app.use('/api', clienteRoutes);
     this.app.use('/api', produtoRoutes);
     this.app.use('/api', pedidoRoutes);
+
+    this.app.use('/api', relatorioRoutes);
 
     this.app.get('/', (req: Request, res: Response) => {
       res.json({ message: 'API funcionando corretamente!' });
