@@ -1,9 +1,5 @@
-// src/services/clienteService.ts
-
-import { PrismaClient } from '@prisma/client';
 import { Cliente } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '../utils/prismaClient';
 
 interface ClienteData {
   nomeCompleto: string;

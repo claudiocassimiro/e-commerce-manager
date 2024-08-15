@@ -1,14 +1,13 @@
 import { UserModel } from '../models/userModel';
 import { generateToken } from '../utils/jwt';
 import { hashPassword, comparePassword } from '../utils/bcrypt';
-import { $Enums, PrismaClient, Usuario } from '@prisma/client';
-
+import { $Enums, Usuario } from '@prisma/client';
+import { prisma } from '../utils/prismaClient';
 export class AuthService {
   private userModel: UserModel;
 
   constructor() {
-    const prismaClient = new PrismaClient();
-    this.userModel = new UserModel(prismaClient);
+    this.userModel = new UserModel(prisma);
   }
 
   async register(
