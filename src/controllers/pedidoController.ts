@@ -27,7 +27,6 @@ export class PedidoController {
       );
       res.status(201).json({ pedido: novoPedido });
     } catch (error) {
-      console.log(error);
       next(new AppError('Erro ao criar pedido', 500));
     }
   }
@@ -52,9 +51,7 @@ export class PedidoController {
   ): Promise<void> {
     try {
       const { id } = req.params;
-      console.log('>>>>>>>', id);
       const pedido = await this.pedidoService.getPedidoById(id);
-      console.log(pedido);
       if (!pedido) {
         return next(new AppError('Pedido não encontrado', 404));
       }
