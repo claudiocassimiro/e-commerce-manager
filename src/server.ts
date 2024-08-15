@@ -11,6 +11,7 @@ import clienteRoutes from './routes/clienteRoutes';
 import produtoRoutes from './routes/produtoRoutes';
 import pedidoRoutes from './routes/pedidoRoutes';
 import relatorioRoutes from './routes/relatorioRoutes';
+import swaggerDocs from './swagger';
 
 import { errorMiddleware } from './middlewares/errorMiddleware';
 
@@ -23,6 +24,7 @@ class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT || 3000;
+    swaggerDocs(this.app);
 
     this.middlewares();
     this.routes();
