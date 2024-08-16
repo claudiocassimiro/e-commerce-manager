@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response, NextFunction } from 'express';
 import { RelatorioService } from '../services/relatorioService';
 import { AppError } from '../utils/appError';
@@ -51,7 +52,7 @@ export class RelatorioController {
       );
       res.download(relatorioPath);
     } catch (error) {
-      next(error);
+      next(new AppError('Período não especificado', 400));
     }
   }
 }
